@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NSTU Admission Portal</title>
+</head>
+<body>
+    <div>
+        <center>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {%if messages %}
+              {%for category,message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{message}}
+              </div>
+              {%endfor%}
+            {%endif%}
+        {%endwith%}
+        </center>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+</body>
+</html>

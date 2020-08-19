@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block content %}
+    <center>
+        <form method="post" action="#">
+            {{form.hidden_tag() }}
+            <legend>Join Today</legend>
+            <div>
+                {{form.username.label}}
+                {% if form.username.errors %}
+                  {{ form.username}}
+                      <div>
+                        {% for error in form.username.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.username}}
+                {% endif %}
+            </div>
+            <p></p>
+            <div>
+                {{form.email.label}}
+                {% if form.email.errors %}
+                  {{ form.email}}
+                      <div>
+                        {% for error in form.email.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.email}}
+                {% endif %}
+            </div>
+            <p></p>
+            <div>
+                {{form.password.label}}
+                {% if form.password.errors %}
+                  {{ form.password}}
+                      <div>
+                        {% for error in form.password.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.password}}
+                {% endif %}
+            </div>
+            <p></p>
+            <div>
+                {{form.confirm_password.label}}
+                {% if form.confirm_password.errors %}
+                  {{ form.confirm_password}}
+                      <div>
+                        {% for error in form.confirm_password.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.confirm_password}}
+                {% endif %}
+            </div>
+            <p></p>
+            <div>
+                {{form.submit}}
+            </div>
+        </form>
+        <div>
+            <h5>Already have an account? </h5>
+            <a href="{{ url_for('login') }}">Log in</a>
+            <h5>Forget password </h5>
+            <a href="{{ url_for('reset_password') }}">Reset Password</a>
+        </div>
+
+    </center>
+
+{% endblock content %}
