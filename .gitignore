@@ -1,2 +1,10 @@
-/venv
 venv/
+.idea/
+.git
+.hg
+.svn
+.DS_Store
+Thumbs.db
+desktop.ini
+__pycache__/
+

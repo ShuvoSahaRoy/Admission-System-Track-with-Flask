@@ -52,7 +52,10 @@
                   {{ form.confirm_password}}
                       <div>
                         {% for error in form.confirm_password.errors %}
-                          <span>{{ error }}</span>
+                          <span>
+                              {{ error }}
+                              Passwords are not matched!
+                          </span>
                         {% endfor%}
                       </div>
                 {% else %}
