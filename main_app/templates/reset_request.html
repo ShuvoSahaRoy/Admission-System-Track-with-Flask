@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+		<center>
+            <div>
+		<form method="post" action="">
+            {{form.hidden_tag() }}
+            <legend>Reset Password</legend>
+            <p></p>
+            <div>
+                {{form.email.label}}
+                {% if form.email.errors %}
+                  {{ form.email}}
+                      <div>
+                        {% for error in form.email.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.email}}
+                {% endif %}
+            </div>
+            <div>
+                <p></p>
+                {{form.submit}}
+            </div>
+        </form>
+		</div>
+		</center>
+{% endblock content %}
