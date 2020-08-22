@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    Woops! Page not Found.
+    {% if current_user.is_authenticated %}
+        <a href="{{url_for('home')}}">Home</a>
+    {% else %}
+        <a href="{{url_for('login')}}">Login</a>
+    {% endif %}
+</center>
+
+{% endblock content %}

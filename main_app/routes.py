@@ -94,3 +94,8 @@ def reset_token(token):
         flash(f'Password reset successful! Now you are able to log in.','success')
         return redirect('/login')
     return render_template('reset_token.html',title= 'Reset Password', form= form)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
