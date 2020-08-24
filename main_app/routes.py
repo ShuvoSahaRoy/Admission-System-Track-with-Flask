@@ -1,10 +1,12 @@
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect,request
 from main_app import app,db,mail
-from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm
+from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm, StudentForm
 from passlib.hash import sha256_crypt
 from main_app.models import Users, Departments, Students
 from flask_login import login_user,current_user,logout_user,login_required
 from flask_mail import Message
+from PIL import Image
+import os,secrets
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -93,9 +95,40 @@ def reset_token(token):
         db.session.commit()
         flash(f'Password reset successful! Now you are able to log in.','success')
         return redirect('/login')
-    return render_template('reset_token.html',title= 'Reset Password', form= form)
+    return render_template('reset_token.html',title= 'Reset Password', form=form)
 
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
+
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _,f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex+ f_ext
+    picture_path = os.path.join(app.root_path,'static/img',picture_fn)
+    output_size= (225,225)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+
+
+@app.route("/student_info",methods=['GET','POST'])
+@login_required
+def student():
+    form = StudentForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            entry = Students(id = form.id.data,name=form.name.data,email=form.email.data,image_file=picture_file,
+                               department=form.department.data)
+        else:
+            entry = Students(id=form.id.data, name=form.name.data, email=form.email.data,department=form.department.data)
+
+        db.session.add(entry)
+        db.session.commit()
+        flash(f'{form.name.data} added as a student!')
+        return redirect('/home')
+    return render_template('student_info.html', title='Student', form=form)

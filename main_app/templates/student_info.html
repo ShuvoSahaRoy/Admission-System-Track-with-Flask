@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block content %}
+    <center>
+      <h3>Student info</h3>
+        <form method="post" action="#" enctype="multipart/form-data">
+            {{form.hidden_tag() }}
+            <div>
+                {{form.id.label}}
+                {% if form.id.errors %}
+                  {{ form.id}}
+                      <div>
+                        {% for error in form.id.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.id}}
+                {% endif %}
+            </div>
+          <p></p>
+            <div>
+                {{form.name.label}}
+                {% if form.name.errors %}
+                  {{ form.name}}
+                      <div>
+                        {% for error in form.name.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.name}}
+                {% endif %}
+            </div>
+            <p></p>
+            <div>
+                {{form.email.label}}
+                {% if form.email.errors %}
+                  {{ form.email}}
+                      <div>
+                        {% for error in form.email.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.email}}
+                {% endif %}
+            </div>
+            <p></p>
+            <div>
+                {{form.department.label}}
+                {% if form.department.errors %}
+                  {{ form.department}}
+                      <div>
+                        {% for error in form.department.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor%}
+                      </div>
+                {% else %}
+                  {{form.department}}
+                {% endif %}
+            </div>
+            <p></p>
+            <div class="form-group">
+               {{ form.picture.label() }}
+               {{ form.picture(class='form-control-file') }}
+               {% if form.picture.errors %}
+                   {% for error in form.picture.errors %}
+               <span>{{ error }}</span>
+                   {% endfor%}
+               {% endif %}
+           </div>
+            <p></p>
+            <div>
+                {{form.submit}}
+            </div>
+        </form>
+        <div>
+            <h5>Already have an account? </h5>
+            <a href="{{ url_for('login') }}">Log in</a>
+            <h5>Forget password </h5>
+            <a href="{{ url_for('reset_request') }}">Reset Password</a>
+        </div>
+
+    </center>
+
+{% endblock content %}

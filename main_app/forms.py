@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField, BooleanField, PasswordField
+from flask_wtf.file import FileAllowed, FileField
+from wtforms import StringField, SubmitField, BooleanField, PasswordField,SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from main_app.models import Users
 
@@ -45,3 +46,13 @@ class ResetPasswordForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 
     submit = SubmitField('Reset Password')
+
+
+class StudentForm(FlaskForm):
+    id = StringField('ID',validators=[DataRequired(),Length(min=5,max=20)])
+    name = StringField('Name',validators=[DataRequired(),Length(min=4,max=20)])
+    email = StringField('Email', validators=[DataRequired(),Email()])
+    department = SelectField('Department',choices=['CSTE','ICE','EEE','SE','ACCE','AM'],validators=[DataRequired()])
+    picture = FileField('Select Profile Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+
+    submit = SubmitField('Submit')
