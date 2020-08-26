@@ -1,8 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-    <center>
-      <h3>Student info</h3>
-        <form method="post" action="#" enctype="multipart/form-data">
+<center>
+    <div>
+        <h3>Student Details</h3>
+        <p></p>
+        <div>
+            <img src="{{image}}" alt="profile_pic">
+            <p></p>
+        </div>
+        <form method="post" action="" enctype="multipart/form-data">
             {{form.hidden_tag() }}
             <div>
                 {{form.id.label}}
@@ -61,7 +67,7 @@
             </div>
             <p></p>
             <div class="form-group">
-               {{ form.picture.label() }}
+                <label>Change Profile Picture</label>
                {{ form.picture(class='form-control-file') }}
                {% if form.picture.errors %}
                    {% for error in form.picture.errors %}
@@ -76,8 +82,10 @@
         </form>
         <div>
             <p></p>
-            <a href="{{url_for('home')}}"><button>Home</button></a>
+            <a href="{{url_for('home')}}">Home</a>
         </div>
-    </center>
+    </div>
+</center>
+
 
 {% endblock content %}

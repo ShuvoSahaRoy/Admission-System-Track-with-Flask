@@ -56,3 +56,7 @@ class StudentForm(FlaskForm):
     picture = FileField('Select Profile Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
     submit = SubmitField('Submit')
+
+
+class SearchForm(FlaskForm):
+    search = StringField([DataRequired()])

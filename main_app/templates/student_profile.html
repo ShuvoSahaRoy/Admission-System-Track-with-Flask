@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    <p>
+    <h3>{{student.name}}'s Profile</h3>
+    </p>
+    <p>
+    <img src="{{image}}" alt="profile_pic">
+    </p>
+    <p><label>Student Id:</label>
+    {{student.id}}</p>
+    <p>
+    <label>Student Name:</label>
+    {{student.name}}
+    </p>
+    <p><label>Student Email:</label>
+    {{student.email}}
+    </p>
+    <p><label>Student Department:</label>
+    {{student.department}}
+    </p>
+    <p>
+        <a href="{{url_for('home')}}"><button>Home</button></a>
+    </p>
+</center>
+{% endblock content %}

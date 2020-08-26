@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect,request
 from main_app import app,db,mail
-from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm, StudentForm
+from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm, StudentForm,SearchForm
 from passlib.hash import sha256_crypt
 from main_app.models import Users, Departments, Students
 from flask_login import login_user,current_user,logout_user,login_required
@@ -46,10 +46,24 @@ def logout():
     return redirect('/')
 
 
-@app.route('/home')
+@app.route('/home',methods=['GET','POST'])
 def home():
+    if request.method=="POST":
+        name = request.form.get('search_box')
+        if name!= "":
+            student = Students.query.filter_by(name=name).first()
+            if student:
+                image_file = url_for('static', filename='img/' + student.image_file)
+                return render_template('student_profile.html',student = student,image=image_file)
+            else:
+                flash('Whoops! Student not found.')
+                return redirect('/home')
+        else:
+            flash('Search Box is empty.')
+
     if current_user.is_authenticated:
-        return render_template('home.html')
+        students = Students.query.order_by(Students.admission_num.desc()).all()
+        return render_template('home.html',students = students)
     else:
         flash(f"You have to Login First.")
         return redirect('/')
@@ -115,6 +129,18 @@ def save_picture(form_picture):
     return picture_fn
 
 
+# total_seat = {'CSTE': 0, 'ACCE': 0, 'ICE': 0, 'EEE': 0, 'SE': 0, 'AM': 0}
+#
+# def student(dept):
+#     for key in total_seat.keys():
+#         if key == dept:
+#             total_seat[key] = total_seat[key] + 1
+#         if total_seat['CSTE'] > 2:
+#             return False
+#         elif total_seat['ICE'] > 30:
+#             return False
+#     return total_seat
+
 @app.route("/student_info",methods=['GET','POST'])
 @login_required
 def student():
@@ -132,3 +158,46 @@ def student():
         flash(f'{form.name.data} added as a student!')
         return redirect('/home')
     return render_template('student_info.html', title='Student', form=form)
+
+
+@app.route("/update/<int:admission_id>",methods=['GET','POST'])
+@login_required
+def update_info(admission_id):
+    student = Students.query.get_or_404(admission_id)
+    image_file = url_for('static', filename='img/' + student.image_file)
+    form = StudentForm()
+    if form.validate_on_submit():
+        student.id = form.id.data
+        student.name = form.name.data
+        student.email = form.email.data
+        student.department = form.department.data
+        if form.picture.data:
+            student.image_file = save_picture(form.picture.data)
+        db.session.commit()
+        flash(f'{form.name.data}\'s info updated successfully!')
+        return redirect('/home')
+    elif request.method == 'GET':
+        form.id.data = student.id
+        form.name.data = student.name
+        form.email.data = student.email
+        form.department.data = student.department
+        return render_template('update.html',form=form,image=image_file)
+    return render_template('update.html',form=form,image=image_file)
+
+
+@app.route('/delete/<int:admission_id>', methods=["POST","GET"])
+@login_required
+def delete_student(admission_id):
+    student = Students.query.get_or_404(admission_id)
+    db.session.delete(student)
+    db.session.commit()
+    flash('Student details has been Deleted!', 'success')
+    return redirect('/home')
+
+
+@app.route('/home/<string:profile>')
+@login_required
+def profile(profile):
+    student = Students.query.filter_by(name=profile).first()
+    image_file = url_for('static', filename='img/' + student.image_file)
+    return render_template('student_profile.html', student=student, image=image_file)

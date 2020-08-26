@@ -1,11 +1,37 @@
 {% extends "layout.html" %}
 {% block content %}
-
 <body>
     <center>
         <div>
             <h3>Admission Details</h3>
-            <h3>Here will be the all student details</h3>
+            <form action = "" method = "POST">
+                 <p><input type = 'text' placeholder="Search by Name" name = 'search_box'/></p>
+                 <p><input type = 'submit' value = 'Search'/></p>
+             </form>
+            <p></p>
+            <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Department</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in students %}
+            <tr>
+              <td>{{student.id}}</td>
+              <td><a href="{{url_for('profile', profile=student.name)}}">{{student.name}}</a></td>
+              <td>{{student.email}}</td>
+              <td>{{student.department}}</td>
+              <td><a href="{{url_for('update_info', admission_id=student.admission_num)}}"><button>Update</button></a></td>
+              <td><a href="{{url_for('delete_student', admission_id=student.admission_num)}}"><button>Delete</button></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+            <p></p>
             <a href="/student_info"><button>Add Student</button></a>
             <p></p>
             <a href="{{url_for('logout')}}">Logout</a>
