@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect,request
 from main_app import app,db,mail
-from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm, StudentForm,SearchForm
+from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm, StudentForm
 from passlib.hash import sha256_crypt
 from main_app.models import Users, Departments, Students
 from flask_login import login_user,current_user,logout_user,login_required
@@ -129,17 +129,39 @@ def save_picture(form_picture):
     return picture_fn
 
 
-# total_seat = {'CSTE': 0, 'ACCE': 0, 'ICE': 0, 'EEE': 0, 'SE': 0, 'AM': 0}
-#
-# def student(dept):
-#     for key in total_seat.keys():
-#         if key == dept:
-#             total_seat[key] = total_seat[key] + 1
-#         if total_seat['CSTE'] > 2:
-#             return False
-#         elif total_seat['ICE'] > 30:
-#             return False
-#     return total_seat
+def check(seat):
+    total_seat = seat.total_seat
+    filled = seat.fill_up
+    if total_seat > filled:
+        filled += 1
+        seat.fill_up = filled
+        return True
+    else:
+        return False
+
+
+def count_seat(dept):
+    cste = Departments.query.filter_by(department_name="CSTE").first()
+    ice = Departments.query.filter_by(department_name="ICE").first()
+    eee = Departments.query.filter_by(department_name="EEE").first()
+    se = Departments.query.filter_by(department_name="SE").first()
+    am = Departments.query.filter_by(department_name="AM").first()
+    acce = Departments.query.filter_by(department_name="ACCE").first()
+    if dept == "CSTE":
+        return check(cste)
+    elif dept == "ICE":
+        return check(ice)
+    elif dept == "EEE":
+        return check(eee)
+    elif dept == "SE":
+        return check(se)
+    elif dept == "AM":
+        return check(am)
+    elif dept == "ACCE":
+        return check(acce)
+    else:
+        return [cste,ice,eee,se,am,acce]
+
 
 @app.route("/student_info",methods=['GET','POST'])
 @login_required
@@ -152,11 +174,13 @@ def student():
                                department=form.department.data)
         else:
             entry = Students(id=form.id.data, name=form.name.data, email=form.email.data,department=form.department.data)
-
-        db.session.add(entry)
-        db.session.commit()
-        flash(f'{form.name.data} added as a student!')
-        return redirect('/home')
+        if count_seat(form.department.data):
+            db.session.add(entry)
+            db.session.commit()
+            flash(f'{form.name.data} added as a student!')
+            return redirect('/home')
+        else:
+            flash('Selected dept already full,please choose another one.')
     return render_template('student_info.html', title='Student', form=form)
 
 

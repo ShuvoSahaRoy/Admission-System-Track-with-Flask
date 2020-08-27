@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
-from wtforms import StringField, SubmitField, BooleanField, PasswordField,SelectField
+from wtforms import StringField, SubmitField, BooleanField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from main_app.models import Users
+from main_app.models import Users,Students
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username',validators=[DataRequired(),Length(min=2,max=20)])
-    email = StringField('Email', validators=[DataRequired(),Email()])
-    password = PasswordField('Password',validators=[DataRequired(),Length(min=3,max=20)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=3, max=20)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 
     submit = SubmitField('Sign Up')
@@ -49,14 +49,21 @@ class ResetPasswordForm(FlaskForm):
 
 
 class StudentForm(FlaskForm):
-    id = StringField('ID',validators=[DataRequired(),Length(min=5,max=20)])
-    name = StringField('Name',validators=[DataRequired(),Length(min=4,max=20)])
-    email = StringField('Email', validators=[DataRequired(),Email()])
-    department = SelectField('Department',choices=['CSTE','ICE','EEE','SE','ACCE','AM'],validators=[DataRequired()])
+    id = StringField('ID', validators=[DataRequired(), Length(min=5, max=20)])
+    name = StringField('Name', validators=[DataRequired(), Length(min=4, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    department = SelectField('Department', choices=['CSTE', 'ICE', 'EEE', 'SE', 'ACCE', 'AM'],
+                             validators=[DataRequired()])
     picture = FileField('Select Profile Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
     submit = SubmitField('Submit')
 
+    def validate_id(self,id):
+        student_id = Students.query.filter_by(id = id.data).first()
+        if student_id:
+            raise ValidationError('ID have already taken.Please use another one.')
 
-class SearchForm(FlaskForm):
-    search = StringField([DataRequired()])
+    def validate_email(self, email):
+        email = Students.query.filter_by(email=email.data).first()
+        if email:
+            raise ValidationError('Email have already taken.Please use another one.')

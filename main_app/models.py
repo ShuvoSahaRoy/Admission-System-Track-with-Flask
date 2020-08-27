@@ -34,6 +34,7 @@ class Users(db.Model, UserMixin):
 class Departments(db.Model):
     department_name = db.Column(db.String(80), primary_key=True, nullable=False)
     total_seat = db.Column(db.Integer, nullable=False)
+    fill_up = db.Column(db.Integer)
     stu_dept = db.relationship('Students', backref='student', lazy=True)
 
     def __repr__(self):
@@ -43,7 +44,7 @@ class Departments(db.Model):
 class Students(db.Model):
     admission_num = db.Column(db.Integer, primary_key=True)
     id = db.Column(db.String(15), unique=True, nullable=False)
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     department = db.Column(db.String(80), db.ForeignKey('departments.department_name'), nullable=False)
