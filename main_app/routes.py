@@ -10,6 +10,7 @@ import os,secrets
 
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect('/home')
@@ -107,7 +108,7 @@ def reset_token(token):
         hashed_password = sha256_crypt.encrypt(str(form.password.data))
         user.password = hashed_password
         db.session.commit()
-        flash(f'Password reset successful! Now you are able to log in.','success')
+        flash(f'Password reset successful! Now you are able to log in.')
         return redirect('/login')
     return render_template('reset_token.html',title= 'Reset Password', form=form)
 
