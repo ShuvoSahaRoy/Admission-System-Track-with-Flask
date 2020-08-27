@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    <div>
+        <p>Available seat and total seat details</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Department</th>
+              <th>Total Seat</th>
+              <th>Filled</th>
+              <th>Remaining</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for department in departments %}
+            <tr>
+              <td>{{department.department_name}}</td>
+              <td>{{department.total_seat}}</a></td>
+              <td>{{department.fill_up}}</td>
+              <td>{{department.total_seat - department.fill_up}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    <p></p>
+    <p></p>
+
+    <div>
+        <h3><p>Student list according to department</p></h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>CSTE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in list[0].stu_dept %}
+            <tr>
+              <td>{{student.name}}</td>
+            <tr>
+            {% endfor %}
+          </tbody>
+             <thead>
+            <tr>
+              <th>ICE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in list[1].stu_dept %}
+            <tr>
+              <td>{{student.name}}</td>
+            <tr>
+            {% endfor %}
+          </tbody>
+             <thead>
+            <tr>
+              <th>EEE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in list[2].stu_dept %}
+            <tr>
+              <td>{{student.name}}</td>
+            <tr>
+            {% endfor %}
+          </tbody>
+             <thead>
+            <tr>
+              <th>SE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in list[3].stu_dept %}
+            <tr>
+              <td>{{student.name}}</td>
+            <tr>
+            {% endfor %}
+          </tbody>
+             <thead>
+            <tr>
+              <th>AM</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in list[4].stu_dept %}
+            <tr>
+              <td>{{student.name}}</td>
+            <tr>
+            {% endfor %}
+          </tbody>
+             <thead>
+            <tr>
+              <th>ACCE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in list[5].stu_dept %}
+            <tr>
+              <td>{{student.name}}</td>
+            <tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    <p></p>
+    <a href="{{url_for('home')}}"><button>Home</button></a>
+</center>
+
+{% endblock content %}

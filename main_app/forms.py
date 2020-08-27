@@ -55,11 +55,10 @@ class StudentForm(FlaskForm):
     department = SelectField('Department', choices=['CSTE', 'ICE', 'EEE', 'SE', 'ACCE', 'AM'],
                              validators=[DataRequired()])
     picture = FileField('Select Profile Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
-
     submit = SubmitField('Submit')
 
-    def validate_id(self,id):
-        student_id = Students.query.filter_by(id = id.data).first()
+    def validate_id(self, id):
+        student_id = Students.query.filter_by(id=id.data).first()
         if student_id:
             raise ValidationError('ID have already taken.Please use another one.')
 
@@ -67,3 +66,9 @@ class StudentForm(FlaskForm):
         email = Students.query.filter_by(email=email.data).first()
         if email:
             raise ValidationError('Email have already taken.Please use another one.')
+
+
+class UpdateForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=4, max=20)])
+    picture = FileField('Change Profile Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    submit = SubmitField('Submit')

@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect,request
 from main_app import app,db,mail
-from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm, StudentForm
+from main_app.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm, StudentForm,UpdateForm
 from passlib.hash import sha256_crypt
 from main_app.models import Users, Departments, Students
 from flask_login import login_user,current_user,logout_user,login_required
@@ -49,9 +49,9 @@ def logout():
 @app.route('/home',methods=['GET','POST'])
 def home():
     if request.method=="POST":
-        name = request.form.get('search_box')
-        if name!= "":
-            student = Students.query.filter_by(name=name).first()
+        id = request.form.get('search_box')
+        if id!= "":
+            student = Students.query.filter_by(id=id).first()
             if student:
                 image_file = url_for('static', filename='img/' + student.image_file)
                 return render_template('student_profile.html',student = student,image=image_file)
@@ -189,30 +189,30 @@ def student():
 def update_info(admission_id):
     student = Students.query.get_or_404(admission_id)
     image_file = url_for('static', filename='img/' + student.image_file)
-    form = StudentForm()
+    form = UpdateForm()
     if form.validate_on_submit():
-        student.id = form.id.data
+        print('1')
         student.name = form.name.data
-        student.email = form.email.data
-        student.department = form.department.data
         if form.picture.data:
+            print('2')
             student.image_file = save_picture(form.picture.data)
         db.session.commit()
         flash(f'{form.name.data}\'s info updated successfully!')
         return redirect('/home')
     elif request.method == 'GET':
-        form.id.data = student.id
         form.name.data = student.name
-        form.email.data = student.email
-        form.department.data = student.department
-        return render_template('update.html',form=form,image=image_file)
-    return render_template('update.html',form=form,image=image_file)
+        return render_template('update.html',form=form,image=image_file,student=student)
+    return render_template('update.html',form=form,image=image_file,student=student)
 
 
 @app.route('/delete/<int:admission_id>', methods=["POST","GET"])
 @login_required
 def delete_student(admission_id):
     student = Students.query.get_or_404(admission_id)
+    dept = student.department
+    dept_query = Departments.query.filter_by(department_name = dept).first()
+    filled = dept_query.fill_up - 1
+    dept_query.fill_up = filled
     db.session.delete(student)
     db.session.commit()
     flash('Student details has been Deleted!', 'success')
@@ -225,3 +225,11 @@ def profile(profile):
     student = Students.query.filter_by(name=profile).first()
     image_file = url_for('static', filename='img/' + student.image_file)
     return render_template('student_profile.html', student=student, image=image_file)
+
+
+@app.route('/seat_details')
+@login_required
+def seat_details():
+    departments = Departments.query.all()
+    list = count_seat("")
+    return render_template('seat_details.html',departments=departments,list=list)
