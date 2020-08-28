@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_mail import Mail
+import os
 
 app = Flask(__name__)
 app.secret_key = 'fucking lady fucking guy after fucking telling lie.'
@@ -14,8 +15,8 @@ login_manager.login_message_category = 'info'
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'ssroy248@gmail.com'
-app.config['MAIL_PASSWORD'] = 'forprojectwork'
+app.config['MAIL_USERNAME'] = os.environ.get('email')
+app.config['MAIL_PASSWORD'] = os.environ.get('password')
 mail= Mail(app)
 
 from main_app import routes

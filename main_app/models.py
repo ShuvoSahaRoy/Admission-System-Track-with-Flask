@@ -14,7 +14,7 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
-    def get_reset_token(self,expires_sec=120):
+    def get_reset_token(self,expires_sec=18000):
         s= Serializer(app.secret_key,expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf-8')
 
@@ -28,7 +28,7 @@ class Users(db.Model, UserMixin):
         return Users.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}','{self.email}','{self.image_file}')"
+        return f"User('{self.username}','{self.email}')"
 
 
 class Departments(db.Model):
