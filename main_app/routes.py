@@ -224,8 +224,11 @@ def delete_student(admission_id):
 @login_required
 def profile(profile):
     student = Students.query.filter_by(name=profile).first()
-    image_file = url_for('static', filename='img/' + student.image_file)
-    return render_template('student_profile.html', student=student, image=image_file)
+    if student:
+        image_file = url_for('static', filename='img/' + student.image_file)
+        return render_template('student_profile.html', student=student, image=image_file)
+    else:
+        return render_template('404.html')
 
 
 @app.route('/seat_details')
@@ -234,3 +237,19 @@ def seat_details():
     departments = Departments.query.all()
     list = count_seat("")
     return render_template('seat_details.html',departments=departments,list=list)
+
+
+
+# @errors.app_errorhandler(404)
+# def error_404(error):
+#     return render_template('errors/404.html'),404
+#
+#
+# @errors.app_errorhandler(403)
+# def error_403(error):
+#     return render_template('errors/403.html'),404
+#
+#
+# @errors.app_errorhandler(500)
+# def error_500(error):
+#     return render_template('errors/500.html'),404
