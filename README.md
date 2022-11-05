@@ -1,6 +1,6 @@
 # Flask-my-own-first-app
 In this project I am going to build a sample admission process using flask farmwork
-# Feature
+# Features
 1. createing account,
 2. password reset using mail,
 3. add,update, delete feature for student,
