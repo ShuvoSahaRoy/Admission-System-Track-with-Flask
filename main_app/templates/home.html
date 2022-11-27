@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 <body>
-    <center>
-        <div>
-            <h3>Admission Details</h3>
-            <form action = "" method = "POST">
-                 <p><input type = 'text' placeholder="Search by ID" name = 'search_box'/></p>
-                 <p><input type = 'submit' value = 'Search'/></p>
-             </form>
-            <p></p>
-            <table class="table">
-          <thead>
+    <div class="container" style="text-align: center;">
+        <p>Admission Details</p>
+         <form action = "" method = "POST">
+             <p><input type = 'text' placeholder="Search by ID" name = 'search_box'/></p>
+             <p><input type = 'submit' value = 'Search'/></p>
+         </form>
+    </div>
+<div class="container table-responsive">
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="text-center">
             <tr>
               <th>ID</th>
               <th>Name</th>
@@ -32,11 +32,10 @@
           </tbody>
         </table>
 
-            <p><a href="/student_info"><button>Add Student</button></a></p>
-            <p><a href="{{url_for('seat_details')}}"><button>About Seat information</button></a></p>
-           <p><a href="{{url_for('logout')}}">Logout</a></p>
+{#            <p><a href="/student_info"><button>Add Student</button></a></p>#}
+{#            <p><a href="{{url_for('seat_details')}}"><button>About Seat information</button></a></p>#}
+{#           <p><a href="{{url_for('logout')}}">Logout</a></p>#}
         </div>
-    </center>
 </body>
 
 

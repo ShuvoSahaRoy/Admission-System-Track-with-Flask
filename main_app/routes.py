@@ -22,6 +22,7 @@ def login():
             flash(f'Login succesfull')
             return redirect(url_for('home'))
         else:
+            print('here')
             flash(f"Wrong Email or Password")
     return render_template('login.html', title='Login', form=form)
 
@@ -236,6 +237,7 @@ def profile(profile):
 def seat_details():
     departments = Departments.query.all()
     list = count_seat("")
+    print(list)
     return render_template('seat_details.html',departments=departments,list=list)
 
 

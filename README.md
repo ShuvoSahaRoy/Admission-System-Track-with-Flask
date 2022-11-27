@@ -1,5 +1,5 @@
 # Flask-my-own-first-app
-In this project I am going to build a sample admission process using flask farmwork
+In this project I am going to build a sample admission process using flask framework
 # Features
 1. createing account,
 2. password reset using mail,
@@ -11,6 +11,6 @@ In this project I am going to build a sample admission process using flask farmw
 8. Query on database and check database before any commit.
 
 # Limitation
-As I make it for learning purpose 
+As I make it for learning purpose
 1. There is no admin login.
 2. Any registered user can play with database.
